@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% if winner %}
+<div style="background: #98cbff; border: 2px solid #17a2b8; border-radius: 8px; padding: 20px; max-width: 600px; margin: 30px auto; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <h1 style="color: #17a2b8; font-weight: bold; margin-bottom: 15px;">We have a winner!!!</h1>
+    <h2 style="color: #343a40;">
+        The winner for <span style="color:#007bff;">{{ listing.name }}</span><br>
+        is <span style="color:#28a745;">{{ winner.username }}</span><br>
+        bidding <span style="color:#dc3545;">${{ bid.money }}</span>
+    </h2>
+</div>
+{% else %}
+<div style="background: #dd5f46; border: 2px solid #ff0000; border-radius: 8px; padding: 20px; max-width: 600px; margin: 30px auto; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <h1 style="color: #000000; font-weight: bold; margin-bottom: 15px;">You closed the listing without a winner</h1>
+    <h2 style="color: #000000;">
+        Remake the <span style="color:#aa00ff;">{{ listing.name }}'s listing please</span><br>
+</div>
+{% endif %}
+{% endblock %}

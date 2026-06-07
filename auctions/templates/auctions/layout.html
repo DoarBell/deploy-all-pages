@@ -1,0 +1,75 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+    <head>
+        <title>{% block title %}Auctions{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+    </head>
+    <body style="height: 100%; background-color: rgb(37, 48, 48); color: whitesmoke;">
+        <div class="row">
+            {% if user.is_authenticated %}
+            <div style="padding-left: 10px; padding-top: 10px; min-width: 100px; max-width: 150px; height: 100vh; position: fixed; overflow-y: auto; top: 0; right: 0; background-color: rgb(68, 78, 101);">
+                <h3 class="text-light">Listings watching</h3>
+                <div class="row">
+                    {% if cart_views %}
+                        {% for cart_view in cart_views %}
+                        <div class="row-sm" style="max-width: 140px; padding-left: 10px; padding-bottom: 10px; position: relative;">
+                            {% if cart_view.listing.is_real == False %}
+                                <img src="https://www.pngkey.com/png/full/15-153481_real-estate-sold-png-banner-transparent-stock-real.png" style="position: absolute; top: 25%; left: 50%; transform: translate(-50%, -50%); max-width: 120px; z-index: 10; pointer-events: none;" alt="sold missing">
+                            {% endif %}
+                            <a href="{% url 'listing_view' id=cart_view.listing.id%}">
+                                <img src="{{ cart_view.listing.img_url}}" style="max-width: 120px; align-self: center; position: relative;" alt="view_img_missing">
+                            </a>
+                            {{ cart_view.listing.name }}
+                            <div style="font-size: 20px;">${{ cart_view.listing.min_bid }}</div>
+                            <a href="{% url 'rm_watch' id=cart_view.listing.id %}"><button type="button" class="btn btn-info">Stop watching</button></a>
+                            <hr>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            <div class="col" style="min-width: 250px; margin-right: 160px; margin-left: 10px;">
+                <a href="{% url 'index' %}" style="color: rgb(61, 85, 222); font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 90px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/SCP_Foundation_Logo_v2_Fixed.png" style="height: 100px;" alt="scp logo">Shoping
+                </a>
+                <div>
+                    {% if user.is_authenticated %}
+                        Signed in as <strong>{{ user.username }}</strong>.
+                    {% else %}
+                        Not signed in.
+                    {% endif %}
+                </div>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cr_listing' %}">Create listing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'owning' id=0%}">Owned listings</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <hr style="background-color: gray;">
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

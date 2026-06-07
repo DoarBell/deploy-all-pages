@@ -136,6 +136,8 @@ def watch(request, id):
         new_watch.save()
     except IntegrityError:
         messages.warning(request, "Listing already added")
+    except ValueError: 
+        messages.warning(request, "User not registered")
     return HttpResponseRedirect(reverse("listing_view", args=[id]))
 
 def listing_view(request, id):
